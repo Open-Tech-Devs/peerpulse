@@ -1,12 +1,6 @@
 import httpStatus from "http-status";
 import catchAsync from "../utils/catchAsync";
-import {
-  tokenService,
-  userService,
-  authService,
-  emailService,
-} from "../services";
-import exclude from "../utils/exclude";
+import { userService } from "../services";
 import { User } from "@prisma/client";
 
 const getCurrentUser = catchAsync(async (req, res) => {
@@ -14,6 +8,13 @@ const getCurrentUser = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const updateUserById = catchAsync(async (req, res) => {
+  const user = req.user as User;
+  const updateUser = await userService.updateUserById(user.id, req.body);
+  res.status(httpStatus.OK).send(updateUser);
+});
+
 export default {
   getCurrentUser,
+  updateUserById,
 };

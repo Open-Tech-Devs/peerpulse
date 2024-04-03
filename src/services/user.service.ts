@@ -50,6 +50,7 @@ const getUserByEmail = async <Key extends keyof User>(
     "isEmailVerified",
     "createdAt",
     "updatedAt",
+    "profilePicture",
   ] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({
@@ -75,6 +76,7 @@ const getUserById = async <Key extends keyof User>(
     "isEmailVerified",
     "createdAt",
     "updatedAt",
+    "profilePicture",
   ] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({
@@ -101,6 +103,7 @@ const getUserByUsername = async <Key extends keyof User>(
     "isEmailVerified",
     "createdAt",
     "updatedAt",
+    "profilePicture",
   ] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({

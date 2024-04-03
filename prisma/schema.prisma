@@ -23,6 +23,7 @@ model User {
   Token           Token[]
   college         College?  @relation(fields: [collegeId], references: [id])
   collegeId       String?
+  profilePicture  String?
   Post            Post[]
   Like            Like[]
   Comment         Comment[]

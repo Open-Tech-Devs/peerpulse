@@ -14,6 +14,7 @@ const allRoles = {
     "getPostById",
     "likePost",
     "getExplanation",
+    "updateUser",
   ],
   [Role.ADMIN]: ["getUsers", "manageUsers"],
 };
