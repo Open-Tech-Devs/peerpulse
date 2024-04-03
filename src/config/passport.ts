@@ -24,6 +24,7 @@ const jwtVerify: VerifyCallback = async (payload, done) => {
         isEmailVerified: true,
         collegeId: true,
         role: true,
+        profilePicture: true,
       },
       where: { id: payload.sub },
     });
