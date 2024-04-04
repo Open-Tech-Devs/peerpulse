@@ -9,17 +9,13 @@ const getExplanationStream = catchAsync(async (req, res) => {
     res.status(httpStatus.NOT_FOUND).send("Post not found");
     return;
   }
-  res.writeHead(200, {
-    "Content-Type": "text/plain",
-    "Transfer-Encoding": "chunked",
+  const explanation = await aiService.getExplanationStream(
+    post.title,
+    post.content
+  );
+  res.status(httpStatus.OK).send({
+    explanation: explanation,
   });
-
-  const stream = await aiService.getExplanationStream(post.title, post.content);
-  for await (const chunk of stream) {
-    res.write(chunk.choices[0].delta.content + "\n");
-  }
-  console.log("Stream ended");
-  res.end();
 });
 
 export default {
