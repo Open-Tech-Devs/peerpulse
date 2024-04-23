@@ -19,6 +19,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: peerpulse-test
+          SAS_URL: ${{ secrets.SAS_URL }}
         ports:
           - 5432:5432
         options: >-
