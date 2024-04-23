@@ -21,7 +21,7 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   Token           Token[]
-  college         College?  @relation(fields: [collegeId], references: [id])
+  college         College?  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
   collegeId       String?
   profilePicture  String?
   Post            Post[]
@@ -36,7 +36,7 @@ model Token {
   type      TokenType
   expiresAt DateTime
   createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }
 
@@ -72,9 +72,9 @@ model Post {
   content   String
   PostType  PostType
   authorId  String
-  Author    User      @relation(fields: [authorId], references: [id])
+  Author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   collegeId String?
-  College   College?  @relation(fields: [collegeId], references: [id])
+  College   College?  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
   media     String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -89,8 +89,8 @@ model Like {
   id        String   @id @default(uuid())
   postId    String
   userId    String
-  Post      Post     @relation(fields: [postId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -102,8 +102,8 @@ model Comment {
   content   String
   postId    String
   userId    String
-  Post      Post     @relation(fields: [postId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   isEdited  Boolean  @default(false)
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -115,7 +115,7 @@ model Option {
   content   String   @db.Char(100)
   media     String?
   postId    String
-  Post      Post     @relation(fields: [postId], references: [id])
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   votes     Vote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -127,8 +127,8 @@ model Vote {
   id        String   @id @default(uuid())
   userId    String
   optionId  String
-  Option    Option   @relation(fields: [optionId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
+  Option    Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

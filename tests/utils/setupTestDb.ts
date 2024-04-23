@@ -1,10 +1,10 @@
-//import { PrismaClient } from "@prisma/client";
-import prisma from "../../src/client";
+import { PrismaClient } from "@prisma/client";
+//import prisma from "../../src/client";
 import { beforeAll, beforeEach, afterAll } from "@jest/globals";
 
-/* const prisma = new PrismaClient({
+const prisma = new PrismaClient({
   datasourceUrl: process.env.TEST_DATABASE_URL,
-}); */
+});
 
 const setupTestDB = () => {
   beforeAll(async () => {
