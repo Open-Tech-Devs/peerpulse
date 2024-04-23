@@ -19,6 +19,9 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: peerpulse-test
+          CONTAINER_NAME: peerpulse
+          ACCOUNT_NAME: peerpulseblob
+          BLOB_ENDPOINT: https://peerpulseblob.blob.core.windows.net/
           SAS_URL: ${{ secrets.PEERPULSE_SAS_URL }}
           SAS_TOKEN: ${{ secrets.PEERPULSE_SAS_TOKEN }}
         ports:
