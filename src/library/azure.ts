@@ -6,7 +6,9 @@ const connectionString = process.env.SAS_URL;
 const containerName = process.env.CONTAINER_NAME;
 const blobServiceClient = new BlobServiceClient(connectionString!);
 const blobEndpoint = process.env.BLOB_ENDPOINT;
-const containerClient = blobServiceClient.getContainerClient(containerName!);
+const containerClient = blobServiceClient.getContainerClient(
+  containerName || ""
+);
 
 export const listContainers = async () => {
   let i = 1;
