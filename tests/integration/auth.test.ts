@@ -1,6 +1,5 @@
 import request from "supertest";
 import app from "../../src/app";
-import { faker } from "@faker-js/faker";
 import setupTestDB from "../utils/setupTestDb";
 import httpStatus from "http-status";
 import prisma from "../../src/client";
@@ -18,7 +17,7 @@ describe("Auth routes", () => {
     };
     beforeEach(() => {
       newUser = {
-        email: "kk@uem.edu.in",
+        email: "kkk@uem.edu.in",
         password: "password",
         username: "someuser",
       };
@@ -39,6 +38,7 @@ describe("Auth routes", () => {
         email: newUser.email,
         role: Role.USER,
         isEmailVerified: false,
+        profilePicture: null,
       });
 
       const dbUser = await prisma.user.findUnique({

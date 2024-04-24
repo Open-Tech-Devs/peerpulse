@@ -13,12 +13,14 @@ import { CollegePost } from "../types/Posts";
  * @param {string} title
  * @param {string} media
  * @param {string} collegeId
+ * @param {boolean} isPublic
  * @returns {Promise<Post>}
  */
 
 const createPost = async (
   content: string,
   userId: string,
+  isPublic: boolean,
   title?: string,
   media?: string,
   collegeId?: string
@@ -30,6 +32,7 @@ const createPost = async (
       authorId: userId,
       media,
       collegeId,
+      isPublic,
       PostType: PostType.POST,
     },
   });
@@ -43,6 +46,7 @@ const createPost = async (
  * @param {string} title
  * @param {string} media
  * @param {string} collegeId
+ * @param {boolean} isPublic
  * @returns {Promise<Post & {options: Option[]}>}
  */
 
@@ -50,6 +54,7 @@ const createPoll = async (
   content: string,
   userId: string,
   options: Option[],
+  isPublic: boolean,
   title?: string,
   media?: string,
   collegeId?: string
@@ -73,6 +78,7 @@ const createPoll = async (
       authorId: userId,
       media,
       PostType: PostType.POLL,
+      isPublic,
       options: {
         create: options,
       },
@@ -88,7 +94,7 @@ const createPoll = async (
  * Get post by id
  * @param {string} id
  * @param {Array<Key>} keys
- * @returns {Promise<Pick<Post, Key> | null>}
+ * @returns {Promise<CollegePost | null>}
  */
 const getPostById = async <Key extends keyof Post>(
   id: string,
@@ -99,15 +105,34 @@ const getPostById = async <Key extends keyof Post>(
     "authorId",
     "collegeId",
     "media",
+    "isPublic",
     "PostType",
+    "isEdited",
+    "options",
+    "likes",
+    "comments",
     "createdAt",
     "updatedAt",
   ] as Key[]
-): Promise<Pick<Post, Key> | null> => {
+): Promise<Pick<CollegePost, keyof CollegePost> | null> => {
   return prisma.post.findUnique({
     where: { id },
-    select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
-  }) as Promise<Pick<Post, Key> | null>;
+    select: {
+      ...keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
+      Author: true,
+      comments: {
+        include: {
+          User: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+  }) as Promise<Pick<CollegePost, keyof CollegePost> | null>;
 };
 
 /**
@@ -131,6 +156,7 @@ const queryCollegePosts = async ({
     "PostType",
     "isEdited",
     "options",
+    "isPublic",
     "likes",
     "comments",
     "createdAt",
@@ -148,6 +174,7 @@ const queryCollegePosts = async ({
     ...filter,
     collegeId: entityId,
     isDeleted: false,
+    isPublic: false,
     AND: search
       ? {
           OR: [

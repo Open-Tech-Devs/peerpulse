@@ -32,6 +32,11 @@ jobs:
       LOCAL_DATABASE_URL: postgresql://postgres:password@postgres:5432/peerpulse-test?connect_timeout=300
       TEST_DATABASE_URL: postgresql://postgres:password@postgres:5432/peerpulse-test?connect_timeout=300
       JWT_SECRET: somejwtsecret
+      CONTAINER_NAME: peerpulse
+      ACCOUNT_NAME: peerpulseblob
+      BLOB_ENDPOINT: https://peerpulseblob.blob.core.windows.net/
+      SAS_URL: ${{ secrets.PEERPULSE_SAS_URL }}
+      SAS_TOKEN: ${{ secrets.PEERPULSE_SAS_TOKEN }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3

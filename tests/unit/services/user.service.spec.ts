@@ -21,6 +21,7 @@ describe("User service tests", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       collegeId: null,
+      profilePicture: null,
     };
 
     it("should create a new user", async () => {

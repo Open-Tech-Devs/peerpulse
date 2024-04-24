@@ -8,26 +8,28 @@ import { uploadBlob } from "../library/azure";
 
 const createPost = catchAsync(async (req, res) => {
   const user = req.user as User;
-  const { content, title, media } = req.body;
+  const { content, title, media, isPublic } = req.body;
   const post = await postService.createPost(
     content,
     user.id,
     title,
     media,
-    user.collegeId ?? undefined
+    user.collegeId ?? undefined,
+    isPublic ?? false
   );
   res.status(httpStatus.CREATED).send(post);
 });
 
 const createPoll = catchAsync(async (req, res) => {
   const user = req.user as User;
-  const { content, title, media, options } = req.body;
+  const { content, title, media, options, isPublic } = req.body;
   const poll = await postService.createPoll(
     content,
     user.id,
     options,
     title,
     media,
+    isPublic ?? false,
     user.collegeId ?? undefined
   );
   res.status(httpStatus.CREATED).send(poll);
@@ -40,15 +42,18 @@ const uploadMedia = catchAsync(async (req, res) => {
   });
 });
 
+const getPostById = catchAsync(async (req, res) => {
+  const { postId } = req.params;
+  const post = await postService.getPostById(postId);
+  if (!post) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Post not found");
+  }
+  res.send(post);
+});
+
 const queryCollegePosts = catchAsync(async (req, res) => {
   const user = req.user as User;
-  if (!user.collegeId) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      "User is not associated with a college"
-    );
-  }
-  const entityId = user.collegeId;
+  const entityId = user.collegeId ?? undefined;
   const search = req.query.search ? String(req.query.search) : undefined;
   const filter = pick(req.query, ["authorId", "PostType"]);
   const options = pick(req.query, ["limit", "cursor", "sortBy", "sortType"]);
@@ -64,6 +69,7 @@ const queryCollegePosts = catchAsync(async (req, res) => {
 export default {
   createPost,
   createPoll,
+  getPostById,
   queryCollegePosts,
   uploadMedia,
 };

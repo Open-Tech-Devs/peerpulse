@@ -24,8 +24,6 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-    networks:
-      - peerpulse-network
   peerpulse-server:
     build: .
     image: peerpulsereg.azurecr.io/peerpulse
@@ -38,9 +36,3 @@ services:
     depends_on:
       peerpulse-db:
         condition: service_healthy
-    networks:
-      - peerpulse-network
-
-networks:
-  peerpulse-network:
-    driver: bridge
