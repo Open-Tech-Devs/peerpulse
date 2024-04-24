@@ -13,6 +13,10 @@ router
   .get(auth("queryCollegePosts"), postController.queryCollegePosts);
 
 router
+  .route("/public")
+  .get(auth("queryPublicPosts"), postController.queryPublicPosts);
+
+router
   .route("/:postId")
   .get(auth("getPostById"), checkActionAccess, postController.getPostById);
 

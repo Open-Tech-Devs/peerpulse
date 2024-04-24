@@ -5,3 +5,7 @@ export type CollegePost = Omit<Post, "comments"> & { Auther: User } & {
     _count: { comments: number; likes: number };
   };
 };
+
+export interface DemoType {
+  demo: number;
+}

@@ -12,10 +12,10 @@ const createPost = catchAsync(async (req, res) => {
   const post = await postService.createPost(
     content,
     user.id,
+    isPublic,
     title,
     media,
-    user.collegeId ?? undefined,
-    isPublic ?? false
+    user.collegeId ?? undefined
   );
   res.status(httpStatus.CREATED).send(post);
 });
@@ -27,9 +27,9 @@ const createPoll = catchAsync(async (req, res) => {
     content,
     user.id,
     options,
+    isPublic ?? false,
     title,
     media,
-    isPublic ?? false,
     user.collegeId ?? undefined
   );
   res.status(httpStatus.CREATED).send(poll);
@@ -66,10 +66,23 @@ const queryCollegePosts = catchAsync(async (req, res) => {
   res.send(response);
 });
 
+const queryPublicPosts = catchAsync(async (req, res) => {
+  const search = req.query.search ? String(req.query.search) : undefined;
+  const filter = pick(req.query, ["authorId", "PostType"]);
+  const options = pick(req.query, ["limit", "cursor", "sortBy", "sortType"]);
+  const response = await postService.queryPublicPosts({
+    search,
+    filter,
+    options,
+  });
+  res.send(response);
+});
+
 export default {
   createPost,
   createPoll,
   getPostById,
   queryCollegePosts,
+  queryPublicPosts,
   uploadMedia,
 };

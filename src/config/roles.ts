@@ -8,6 +8,7 @@ const allRoles = {
     "votePoll",
     "commentPost",
     "queryCollegePosts",
+    "queryPublicPosts",
     "currentUser",
     "uploadMedia",
     "queryCommentsForPost",
@@ -15,6 +16,7 @@ const allRoles = {
     "likePost",
     "getExplanation",
     "updateUser",
+    "getPeersFromCollege",
   ],
   [Role.ADMIN]: ["getUsers", "manageUsers"],
 };

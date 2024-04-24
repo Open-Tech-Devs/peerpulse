@@ -220,4 +220,93 @@ const queryCollegePosts = async ({
   };
 };
 
-export default { createPost, createPoll, getPostById, queryCollegePosts };
+/**
+ * Infinite paginated query for public posts
+ * @param {InfinitePaginatedQuery<Post, keyof Post>} query
+ * @returns {Promise<InfinitePaginatedResponse<CollegePost, keyof CollegePost>>}
+ */
+
+const queryPublicPosts = async ({
+  search,
+  filter,
+  options,
+  keys = [
+    "id",
+    "title",
+    "content",
+    "authorId",
+    "collegeId",
+    "media",
+    "PostType",
+    "isEdited",
+    "options",
+    "isPublic",
+    "likes",
+    "comments",
+    "createdAt",
+    "updatedAt",
+  ] as (keyof Post)[],
+}: InfinitePaginatedQuery<Post, keyof Post>): Promise<
+  InfinitePaginatedResponse<CollegePost, keyof CollegePost>
+> => {
+  const limit = options?.limit || 100;
+  const sortBy = options?.sortBy ?? "createdAt";
+  const sortType = options?.sortType ?? "desc";
+  const cursor = options?.cursor ?? null;
+
+  const where: Prisma.PostWhereInput = {
+    ...filter,
+    isDeleted: false,
+    isPublic: true,
+    AND: search
+      ? {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { content: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : undefined,
+  };
+
+  const posts = (await prisma.post.findMany({
+    where,
+    select: {
+      ...keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
+      Author: true,
+      comments: {
+        include: {
+          User: true,
+        },
+        take: 1,
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: { [sortBy]: sortType },
+    cursor: cursor ? { id: cursor } : undefined,
+    take: parseInt(limit.toString()) + 1,
+  })) as unknown as CollegePost[];
+
+  const hasMore = posts.length > limit;
+  if (hasMore) {
+    posts.pop();
+  }
+
+  return {
+    data: posts,
+    hasMore,
+    cursor: posts[posts.length - 1]?.id ?? null,
+  };
+};
+
+export default {
+  createPost,
+  createPoll,
+  getPostById,
+  queryCollegePosts,
+  queryPublicPosts,
+};

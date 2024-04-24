@@ -14,7 +14,14 @@ const updateUserById = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(updateUser);
 });
 
+const getPeersFromCollege = catchAsync(async (req, res) => {
+  const user = req.user as User;
+  const peers = await userService.getPeersFromCollege(user.collegeId || "");
+  res.status(httpStatus.OK).send(peers);
+});
+
 export default {
   getCurrentUser,
   updateUserById,
+  getPeersFromCollege,
 };
