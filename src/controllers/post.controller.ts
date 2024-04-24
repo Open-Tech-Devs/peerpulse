@@ -8,26 +8,28 @@ import { uploadBlob } from "../library/azure";
 
 const createPost = catchAsync(async (req, res) => {
   const user = req.user as User;
-  const { content, title, media } = req.body;
+  const { content, title, media, isPublic } = req.body;
   const post = await postService.createPost(
     content,
     user.id,
     title,
     media,
-    user.collegeId ?? undefined
+    user.collegeId ?? undefined,
+    isPublic ?? false
   );
   res.status(httpStatus.CREATED).send(post);
 });
 
 const createPoll = catchAsync(async (req, res) => {
   const user = req.user as User;
-  const { content, title, media, options } = req.body;
+  const { content, title, media, options, isPublic } = req.body;
   const poll = await postService.createPoll(
     content,
     user.id,
     options,
     title,
     media,
+    isPublic ?? false,
     user.collegeId ?? undefined
   );
   res.status(httpStatus.CREATED).send(poll);

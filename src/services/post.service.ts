@@ -13,12 +13,14 @@ import { CollegePost } from "../types/Posts";
  * @param {string} title
  * @param {string} media
  * @param {string} collegeId
+ * @param {boolean} isPublic
  * @returns {Promise<Post>}
  */
 
 const createPost = async (
   content: string,
   userId: string,
+  isPublic: boolean,
   title?: string,
   media?: string,
   collegeId?: string
@@ -30,6 +32,7 @@ const createPost = async (
       authorId: userId,
       media,
       collegeId,
+      isPublic,
       PostType: PostType.POST,
     },
   });
@@ -43,6 +46,7 @@ const createPost = async (
  * @param {string} title
  * @param {string} media
  * @param {string} collegeId
+ * @param {boolean} isPublic
  * @returns {Promise<Post & {options: Option[]}>}
  */
 
@@ -50,6 +54,7 @@ const createPoll = async (
   content: string,
   userId: string,
   options: Option[],
+  isPublic: boolean,
   title?: string,
   media?: string,
   collegeId?: string
@@ -73,6 +78,7 @@ const createPoll = async (
       authorId: userId,
       media,
       PostType: PostType.POLL,
+      isPublic,
       options: {
         create: options,
       },
@@ -99,6 +105,7 @@ const getPostById = async <Key extends keyof Post>(
     "authorId",
     "collegeId",
     "media",
+    "isPublic",
     "PostType",
     "isEdited",
     "options",
@@ -149,6 +156,7 @@ const queryCollegePosts = async ({
     "PostType",
     "isEdited",
     "options",
+    "isPublic",
     "likes",
     "comments",
     "createdAt",
@@ -166,6 +174,7 @@ const queryCollegePosts = async ({
     ...filter,
     collegeId: entityId,
     isDeleted: false,
+    isPublic: false,
     AND: search
       ? {
           OR: [
