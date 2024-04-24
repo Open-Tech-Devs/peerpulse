@@ -12,6 +12,7 @@ const createPost = zod.object({
       .trim()
       .min(1),
     media: zod.string().optional(),
+    isPublic: zod.boolean(),
   }),
 });
 
@@ -27,6 +28,7 @@ const createPoll = zod.object({
       .trim()
       .min(1),
     media: zod.string().optional(),
+    isPublic: zod.boolean(),
     options: zod
       .array(
         zod.object({
