@@ -8,6 +8,7 @@ const allRoles = {
     "votePoll",
     "commentPost",
     "queryCollegePosts",
+    "queryPublicPosts",
     "currentUser",
     "uploadMedia",
     "queryCommentsForPost",
