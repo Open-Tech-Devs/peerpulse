@@ -16,6 +16,7 @@ const allRoles = {
     "likePost",
     "getExplanation",
     "updateUser",
+    "getPeersFromCollege",
   ],
   [Role.ADMIN]: ["getUsers", "manageUsers"],
 };

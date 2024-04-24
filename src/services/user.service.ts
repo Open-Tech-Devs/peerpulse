@@ -138,10 +138,24 @@ const updateUserById = async <Key extends keyof User>(
   return updatedUser as Pick<User, Key> | null;
 };
 
+const getPeersFromCollege = async <Key extends keyof User>(
+  collegeId: string,
+  keys: Key[] = ["id", "username", "profilePicture"] as Key[]
+) => {
+  const users = await prisma.user.findMany({
+    where: {
+      collegeId,
+    },
+    select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
+  });
+  return users as Pick<User, "id" & "username" & "profilePicture">[];
+};
+
 export default {
   createUser,
   getUserByEmail,
   getUserByUsername,
   getUserById,
   updateUserById,
+  getPeersFromCollege,
 };
